@@ -1,0 +1,143 @@
+{% extends 'base.html' %}
+
+{% block title %}Settings · Hik RTSP Viewer{% endblock %}
+
+{% block content %}
+  <h1 class="h3 mb-4">Settings</h1>
+
+  <div class="row g-4">
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">Add a single host</div>
+        <div class="card-body">
+          <form method="post" class="needs-validation" novalidate>
+            <input type="hidden" name="form_type" value="single" />
+            <div class="mb-3">
+              <label for="name" class="form-label">Camera name (optional)</label>
+              <input type="text" class="form-control" id="name" name="name" placeholder="Front gate" />
+            </div>
+            <div class="mb-3">
+              <label for="ip_address" class="form-label">IP address<span class="text-danger">*</span></label>
+              <input type="text" class="form-control" id="ip_address" name="ip_address" placeholder="10.76.0.5" required />
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="username" name="username" placeholder="admin" />
+              </div>
+              <div class="col-md-6">
+                <label for="password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="password" name="password" placeholder="••••••" />
+              </div>
+            </div>
+            <div class="row g-3 mt-1">
+              <div class="col-md-4">
+                <label for="port" class="form-label">RTSP port</label>
+                <input type="number" class="form-control" id="port" name="port" value="554" />
+              </div>
+              <div class="col-md-4">
+                <label for="channel" class="form-label">Channel</label>
+                <input type="number" class="form-control" id="channel" name="channel" value="1" min="1" />
+              </div>
+              <div class="col-md-4">
+                <label for="stream" class="form-label">Stream</label>
+                <input type="number" class="form-control" id="stream" name="stream" value="1" min="1" />
+              </div>
+            </div>
+            <div class="mt-4 d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary">Add host</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+
+    <div class="col-lg-6">
+      <div class="card h-100">
+        <div class="card-header">Bulk add hosts</div>
+        <div class="card-body">
+          <form method="post">
+            <input type="hidden" name="form_type" value="bulk" />
+            <div class="mb-3">
+              <label for="bulk_hosts" class="form-label">Host IP addresses (one per line)</label>
+              <textarea class="form-control" id="bulk_hosts" name="bulk_hosts" rows="6" placeholder="10.76.0.5&#10;10.76.0.6"></textarea>
+            </div>
+            <div class="row g-3">
+              <div class="col-md-6">
+                <label for="bulk_username" class="form-label">Username</label>
+                <input type="text" class="form-control" id="bulk_username" name="bulk_username" placeholder="admin" />
+              </div>
+              <div class="col-md-6">
+                <label for="bulk_password" class="form-label">Password</label>
+                <input type="password" class="form-control" id="bulk_password" name="bulk_password" placeholder="••••••" />
+              </div>
+            </div>
+            <div class="row g-3 mt-1">
+              <div class="col-md-4">
+                <label for="bulk_port" class="form-label">RTSP port</label>
+                <input type="number" class="form-control" id="bulk_port" name="bulk_port" value="554" />
+              </div>
+              <div class="col-md-4">
+                <label for="bulk_channel" class="form-label">Channel</label>
+                <input type="number" class="form-control" id="bulk_channel" name="bulk_channel" value="1" min="1" />
+              </div>
+              <div class="col-md-4">
+                <label for="bulk_stream" class="form-label">Stream</label>
+                <input type="number" class="form-control" id="bulk_stream" name="bulk_stream" value="1" min="1" />
+              </div>
+            </div>
+            <div class="mt-4 d-flex justify-content-end">
+              <button type="submit" class="btn btn-primary">Bulk add hosts</button>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  </div>
+
+  <div class="card mt-5">
+    <div class="card-header">Configured hosts</div>
+    <div class="table-responsive">
+      <table class="table table-striped mb-0">
+        <thead>
+          <tr>
+            <th scope="col">#</th>
+            <th scope="col">Name</th>
+            <th scope="col">IP address</th>
+            <th scope="col">Username</th>
+            <th scope="col">Port</th>
+            <th scope="col">Channel</th>
+            <th scope="col">Stream</th>
+            <th scope="col">Actions</th>
+          </tr>
+        </thead>
+        <tbody>
+          {% if hosts %}
+            {% for host in hosts %}
+              <tr>
+                <th scope="row">{{ loop.index }}</th>
+                <td>{{ host.name or '—' }}</td>
+                <td>{{ host.ip_address }}</td>
+                <td>{{ host.username or '—' }}</td>
+                <td>{{ host.port }}</td>
+                <td>{{ host.channel }}</td>
+                <td>{{ host.stream }}</td>
+                <td>
+                  <form method="post" class="d-inline">
+                    <input type="hidden" name="form_type" value="delete" />
+                    <input type="hidden" name="index" value="{{ loop.index0 }}" />
+                    <button type="submit" class="btn btn-sm btn-outline-danger">Remove</button>
+                  </form>
+                </td>
+              </tr>
+            {% endfor %}
+          {% else %}
+            <tr>
+              <td colspan="8" class="text-center text-muted py-4">No hosts configured.</td>
+            </tr>
+          {% endif %}
+        </tbody>
+      </table>
+    </div>
+  </div>
+{% endblock %}

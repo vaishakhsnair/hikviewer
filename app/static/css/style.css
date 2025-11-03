@@ -1,0 +1,28 @@
+body {
+  background-color: #f5f7fa;
+}
+
+.navbar-brand {
+  font-weight: 600;
+}
+
+.stream-container {
+  background: #000;
+  min-height: 240px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.stream-container img {
+  width: 100%;
+  object-fit: contain;
+  background: #000;
+}
+
+.alert-container {
+  position: sticky;
+  top: 72px;
+  z-index: 1050;
+}
