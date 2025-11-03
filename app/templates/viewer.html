@@ -1,0 +1,42 @@
+{% extends 'base.html' %}
+
+{% block title %}Viewer · Hik RTSP Viewer{% endblock %}
+
+{% block content %}
+  <div class="d-flex justify-content-between align-items-center mb-3">
+    <h1 class="h3 mb-0">Live Streams</h1>
+    <a class="btn btn-outline-secondary" href="{{ url_for('settings') }}">Manage Hosts</a>
+  </div>
+
+  {% if hosts %}
+    <div class="row g-3">
+      {% for host in hosts %}
+        <div class="col-12 col-md-6 col-xl-4">
+          <div class="card h-100">
+            <div class="card-header">
+              <strong>{{ host.name or host.ip_address }}</strong>
+            </div>
+            <div class="stream-container">
+              <img src="{{ url_for('stream', host_id=loop.index0) }}" class="img-fluid" alt="Stream for {{ host.ip_address }}" />
+            </div>
+            <div class="card-body">
+              <p class="card-text small mb-1">
+                <span class="text-muted">RTSP URL:</span>
+                <code class="d-block text-break">{{ build_rtsp_url(host) }}</code>
+              </p>
+              <p class="card-text small text-muted mb-0">
+                Channel {{ host.channel }} · Stream {{ host.stream }} · Port {{ host.port }}
+              </p>
+            </div>
+          </div>
+        </div>
+      {% endfor %}
+    </div>
+  {% else %}
+    <div class="text-center py-5">
+      <p class="lead">No hosts configured yet.</p>
+      <p>Add your first camera on the settings page.</p>
+      <a class="btn btn-primary" href="{{ url_for('settings') }}">Go to Settings</a>
+    </div>
+  {% endif %}
+{% endblock %}
